@@ -40,3 +40,6 @@ build/
 
 ### properties ###
 local.properties
+
+### idea ###
+.idea
