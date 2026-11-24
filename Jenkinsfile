@@ -41,8 +41,17 @@ spec:
   post {
     always {
       script {
+        container('maven') {
+          sh 'chmod -R a+rwX target || true'
+        }
+
         def r = junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
-        allure results: [[path: 'target/allure-results']]
+
+        try {
+          allure results: [[path: 'target/allure-results']]
+        } catch (e) {
+          echo "Allure failed: ${e.message}"
+        }
 
         def status = currentBuild.currentResult
         def icon = status == 'SUCCESS' ? '✅' : (status == 'UNSTABLE' ? '⚠️' : '❌')
